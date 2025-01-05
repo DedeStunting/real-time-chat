@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es6",                                  /* Target modern JavaScript features (ES6 and above). */
+    "lib": ["es6"],                                   /* Include standard library declarations for ES6. */
+    "module": "commonjs",                             /* Use CommonJS for module system (required by Node.js). */
+    "rootDir": "src",                                 /* Specify the root folder for TypeScript files. */
+    "outDir": "dist",                                 /* Specify the output folder for compiled JavaScript files. */
+    "strict": true,                                   /* Enable all strict type-checking options. */
+    "esModuleInterop": true,                          /* Ensure compatibility with CommonJS modules. */
+    "forceConsistentCasingInFileNames": true,         /* Enforce consistent casing in file names. */
+    "skipLibCheck": true,                             /* Skip type checking of declaration files. */
+
+    /* Module Resolution */
+    "moduleResolution": "node",                      /* Use Node.js module resolution algorithm. */
+    "resolveJsonModule": true,                       /* Allow importing JSON files. */
+    "allowSyntheticDefaultImports": true,            /* Allow default imports from modules without default exports. */
+
+    /* JavaScript Support */
+    "allowJs": true,                                 /* Allow including JavaScript files in the project. */
+
+    /* Source Maps and Debugging */
+    "sourceMap": true,                               /* Generate source maps for easier debugging. */
+    "inlineSources": true                            /* Include TypeScript source files in the source maps. */
+  },
+  "include": ["src/**/*"],                            /* Include all TypeScript files in the src directory. */
+  "exclude": ["node_modules", "dist"]                 /* Exclude unnecessary files and folders. */
+}
