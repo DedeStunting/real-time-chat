@@ -14,5 +14,9 @@
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@types/websocket": "^1.0.10",
+    "websocket": "^1.0.35"
   }
 }
