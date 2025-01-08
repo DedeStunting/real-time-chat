@@ -27,7 +27,7 @@ export  abstract class Store {
 
     }
 
-    upVote(userId: UserId, room: string, chatId: string) {
+    upvote(userId: UserId, room: string, chatId: string) {
 
     }
 
