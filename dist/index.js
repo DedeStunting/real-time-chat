@@ -49,7 +49,7 @@ wsServer.on('request', function (request) {
     });
 });
 function messageHandler(ws, message) {
-    if (message.type == incomingMessages_1.SupportedMessage.JoinRoom) {
+    if (message.type === incomingMessages_1.SupportedMessage.JoinRoom) {
         const payload = message.payload;
         userManager.addUser(payload.name, payload.userId, payload.roomId, ws);
     }
@@ -60,14 +60,15 @@ function messageHandler(ws, message) {
             console.error("User not found in the db");
             return;
         }
-        let chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
+        const chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
         if (!chat) {
+            console.error("Failed to add chat");
             return;
         }
         const outgoingPayload = {
             type: outgoingMessages_1.SupportedMessage.AddChat,
             payload: {
-                chatId: chat.id,
+                chatId: chat.id, // Assert chat as Chat
                 roomId: payload.roomId,
                 message: payload.message,
                 name: user.name,
@@ -80,6 +81,7 @@ function messageHandler(ws, message) {
         const payload = message.payload;
         const chat = store.upvote(payload.userId, payload.roomId, payload.chatId);
         if (!chat) {
+            console.error("Failed to upvote chat");
             return;
         }
         const outgoingPayload = {
@@ -87,7 +89,7 @@ function messageHandler(ws, message) {
             payload: {
                 chatId: payload.chatId,
                 roomId: payload.roomId,
-                upvotes: chat.upvotes.length
+                upvotes: chat.upvotes.length // Assert chat as Chat
             }
         };
         userManager.broadcast(payload.roomId, payload.userId, outgoingPayload);

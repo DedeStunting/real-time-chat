@@ -4,8 +4,8 @@
     "target": "es6",                                  /* Target modern JavaScript features (ES6 and above). */
     "lib": ["es6"],                                    /* Include standard library declarations for ES6. */
     "module": "commonjs",                             /* Use CommonJS for module system (required by Node.js). */
-    "rootDir": "src/",                                 /* Specify the root folder for TypeScript files. */
-    "outDir": "dist",                                 /* Specify the output folder for compiled JavaScript files. */
+    "rootDir": "./src",                                 /* Specify the root folder for TypeScript files. */
+    "outDir": "./dist",                                 /* Specify the output folder for compiled JavaScript files. */
     "strict": true,                                   /* Enable all strict type-checking options. */
     "esModuleInterop": true,                          /* Ensure compatibility with CommonJS modules. */
     "forceConsistentCasingInFileNames": true,         /* Enforce consistent casing in file names. */

@@ -4,6 +4,7 @@ import { IncomingMessage, SupportedMessage } from './messages/incomingMessages';
 import { InMemoryStore } from './store/InMemoryStore';
 import { UserManager } from './UserManager';
 import { OutgoingMessage, SupportedMessage as OutgoingSupportedMessages } from './messages/outgoingMessages';
+import { Chat } from './store/Store';
 
 const server = http.createServer(function (request: any, response: any) {
     console.log((new Date()) + ' Received request for ' + request.url);
@@ -51,10 +52,11 @@ wsServer.on('request', function (request) {
 });
 
 function messageHandler(ws: connection, message: IncomingMessage) {
-    if (message.type == SupportedMessage.JoinRoom) {
+    if (message.type === SupportedMessage.JoinRoom) {
         const payload = message.payload;
         userManager.addUser(payload.name, payload.userId, payload.roomId, ws);
     }
+
     if (message.type === SupportedMessage.SendMessage) {
         const payload = message.payload;
         const user = userManager.getUser(payload.roomId, payload.userId);
@@ -62,28 +64,32 @@ function messageHandler(ws: connection, message: IncomingMessage) {
             console.error("User not found in the db");
             return;
         }
-        let chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
+
+        const chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
         if (!chat) {
+            console.error("Failed to add chat");
             return;
         }
 
         const outgoingPayload: OutgoingMessage = {
             type: OutgoingSupportedMessages.AddChat,
             payload: {
-                chatId: chat.id,
+                chatId: (chat as Chat).id, // Assert chat as Chat
                 roomId: payload.roomId,
                 message: payload.message,
                 name: user.name,
                 upvotes: 0
             }
-        }
+        };
 
         userManager.broadcast(payload.roomId, payload.userId, outgoingPayload);
     }
+
     if (message.type === SupportedMessage.UpvoteMessage) {
         const payload = message.payload;
         const chat = store.upvote(payload.userId, payload.roomId, payload.chatId);
         if (!chat) {
+            console.error("Failed to upvote chat");
             return;
         }
 
@@ -92,9 +98,9 @@ function messageHandler(ws: connection, message: IncomingMessage) {
             payload: {
                 chatId: payload.chatId,
                 roomId: payload.roomId,
-                upvotes: chat.upvotes.length
+                upvotes: (chat as Chat).upvotes.length // Assert chat as Chat
             }
-        }
+        };
 
         userManager.broadcast(payload.roomId, payload.userId, outgoingPayload);
     }

@@ -5,7 +5,7 @@ export interface Room {
     chats: Chat[]
 }
 
-export  class InMemoryStore implements Store {
+export class InMemoryStore implements Store {
     private store: Map<string, Room>;
     constructor() {
         this.store = new Map<string, Room>()
@@ -14,7 +14,7 @@ export  class InMemoryStore implements Store {
         this.store.set(roomId, {
             roomId,
             chats: []
-        });    
+        });
     }
 
     getChats(roomId: string, limit: number, offset: number) {
@@ -29,33 +29,37 @@ export  class InMemoryStore implements Store {
 
     }
 
-    addChat(userId: UserId, name: string, roomId: string, message: string) {
+    addChat(userId: UserId, name: string, roomId: string, message: string): Chat | null {
         const room = this.store.get(roomId);
         if (!room) {
-           return 
+            return null; // Explicitly return null if room doesn't exist
         }
-        room.chats.push ({
+    
+        const chat: Chat = {
             id: (globalChatId++).toString(),
             userId,
             name,
             message,
-            upvotes:[]
-        })
-
+            upvotes: [] // Initialize an empty array for upvotes
+        };
+        room.chats.push(chat);
+        return chat; // Return the created chat
     }
+    
 
-    upvote(userId: UserId, roomId: string, chatId: string) {
+    upvote(userId: UserId, roomId: string, chatId: string): Chat | null {
         const room = this.store.get(roomId);
         if (!room) {
-           return 
+            return null; // Explicitly return null if room doesn't exist
         }
-
-        //Todo: make this faster
-        const chat = room.chats.find(({id}) => id === chatId);
-
-        if (chat) {
-            chat.upvotes.push(userId);
+    
+        const chat = room.chats.find(({ id }) => id === chatId);
+        if (!chat) {
+            return null; // Explicitly return null if chat is not found
         }
-        }
+    
+        chat.upvotes.push(userId); // Add the userId to upvotes
+        return chat; // Return the updated chat
     }
+}    
 
